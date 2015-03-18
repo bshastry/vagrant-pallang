@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo -e "Patching LLVMConfig.cmake"
-sudo patch -p1 /usr/share/llvm-3.6/cmake/LLVMConfig.cmake < LLVMConfig.patch
+sudo patch -p1 /usr/share/llvm-3.6/cmake/LLVMConfig.cmake < /vagrant/scripts/LLVMConfig.patch
 
 cd $HOME
 
@@ -20,9 +20,11 @@ fi
 mkdir -p demo
 cd demo
 
+FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=9b2aedeb600d7d9a16ff442a9ee93b88&download'
+
 # Fetch prebuilt stuff and demo material
 echo -e "Fetching demo stuff"
-wget --no-check-certificate -O tmp.tar.gz 'https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=9b2aedeb600d7d9a16ff442a9ee93b88&download'
+wget --no-check-certificate -O tmp.tar.gz $FETCH_FROM
 tar -zxf tmp.tar.gz
 rm tmp.tar.gz
 
