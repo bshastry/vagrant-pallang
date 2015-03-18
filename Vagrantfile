@@ -67,7 +67,7 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell" do |s|
 	s.path = "provision.sh"
-	s.args = "/conf.d/id_dsa"
+	s.args = "/vagrant/conf.d/id_dsa"
   end
   config.ssh.forward_agent = true 
 end
