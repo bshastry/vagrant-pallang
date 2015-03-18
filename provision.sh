@@ -16,8 +16,8 @@ sudo apt-get install -y git &> /dev/null
 sudo apt-get install -y clang &> /dev/null
 sudo apt-get install -y llvm &> /dev/null
 
-mkdir -p $HOME/software
-cd $HOME/software
+mkdir -p $HOME/depot_tools
+cd $HOME/depot_tools
 
 echo -e "Installing ninja from Chromium depot_tools"
 git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git &> /dev/null

@@ -10,3 +10,7 @@ Consists of:
     - llvm-pass and pallang
 
 Analysis infra is fetched by a script post deploy key add.
+
+**Deploy key**
+
+Please copy deploy (private) key into `conf.d` folder and mail the public key to bshastry@sec.t-labs.tu-berlin.de
