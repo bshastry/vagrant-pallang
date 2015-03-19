@@ -5,7 +5,7 @@ sudo patch -p1 /usr/share/llvm-3.6/cmake/LLVMConfig.cmake < /vagrant/scripts/LLV
 
 cd $HOME
 
-command -v cmake >/dev/null 2>&1 || { echo -e "Installing Cmake"; wget http://www.cmake.org/files/v3.1/cmake-3.1.3-Linux-i386.tar.gz; sudo tar --strip-components=1 -xzf cmake-3.1.3-Linux-i386.tar.gz -C /usr/local; rm cmake-3.1.3-Linux-i386.tar.gz; }
+command -v cmake >/dev/null 2>&1 || { echo -e "Installing Cmake"; wget -q http://www.cmake.org/files/v3.1/cmake-3.1.3-Linux-i386.tar.gz; sudo tar --strip-components=1 -xzf cmake-3.1.3-Linux-i386.tar.gz -C /usr/local; rm cmake-3.1.3-Linux-i386.tar.gz; }
 
 if [ ! -e depot_tools ]; then
 echo -e "Installing depot tools"
@@ -20,11 +20,11 @@ fi
 mkdir -p demo
 cd demo
 
-FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=e09420f047ddd35106772c9553601ac1&download'
+FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=c3ec1d58809e9be6d1a03bd5e545d484&download'
 
 # Fetch prebuilt stuff and demo material
 echo -e "Fetching demo stuff"
-wget --no-check-certificate -O tmp.tar.gz $FETCH_FROM
+wget --no-check-certificate -qO demo.tar.gz $FETCH_FROM
 tar -zxf demo.tar.gz
 rm demo.tar.gz
 
@@ -49,3 +49,5 @@ cd pallang
 git checkout vagrant
 cd ..
 fi
+
+echo -e "Successfully fetched demo package"
