@@ -10,7 +10,7 @@ command -v cmake >/dev/null 2>&1 || { echo -e "Installing Cmake"; wget http://ww
 if [ ! -e depot_tools ]; then
 echo -e "Installing depot tools"
 git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git &> /dev/null
-export PATH=$PATH:$HOME/depot_tools
+sudo update-alternatives --install /usr/bin/ninja ninja /home/vagrant/depot_tools/ninja 50 &> /dev/null
 fi
 
 if [ -e demo ]; then
@@ -20,21 +20,22 @@ fi
 mkdir -p demo
 cd demo
 
-FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=9b2aedeb600d7d9a16ff442a9ee93b88&download'
+FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=e09420f047ddd35106772c9553601ac1&download'
 
 # Fetch prebuilt stuff and demo material
 echo -e "Fetching demo stuff"
 wget --no-check-certificate -O tmp.tar.gz $FETCH_FROM
-tar -zxf tmp.tar.gz
-rm tmp.tar.gz
+tar -zxf demo.tar.gz
+rm demo.tar.gz
 
 # Fetch LLVM pass code
 if [ ! -e llvm-pass ]; then
 echo -e "Cloning llvm pass"
 git clone git@gitlab.sec.t-labs.tu-berlin.de:static-analysis/llvm-pass.git
+cd llvm-pass
 git checkout vagrant
-mkdir -p llvm-pass/build
-cd llvm-pass/build
+mkdir -p build
+cd build
 echo -e "Running CMake on llvm-pass"
 cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../
 cd ../../
@@ -44,5 +45,7 @@ fi
 if [ ! -e pallang ]; then
 echo -e "Cloning pallang vagrant branch"
 git clone git@gitlab.sec.t-labs.tu-berlin.de:static-analysis/pallang.git
+cd pallang
 git checkout vagrant
+cd ..
 fi
