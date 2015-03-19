@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
 sudo apt-get update &> /dev/null
 
 ### Pre-reqs: GCC-4.8 for chromium, cmake as project builder
-echo -e "Installing gcc-4.8 backport, vim, and git"
+echo -e "Installing gcc-4.8 backport, clang, vim, and git"
 echo -e "This might take a while...Coffee, perhaps?"
 sudo apt-get install -y python-software-properties &> /dev/null
 sudo apt-get install -y python-bs4 &> /dev/null
@@ -28,7 +28,7 @@ sudo apt-get install -y git &> /dev/null
 #sudo update-alternatives --install /usr/bin/opt opt /usr/bin/opt-3.6 50 &> /dev/null
 #sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-3.6 50 &> /dev/null
 #sudo update-alternatives --install /usr/bin/scan-view scan-view /usr/bin/scan-view-3.6 50 &> /dev/null
-sudo apt-get install clang
+sudo apt-get install clang &> /dev/null
 
 echo -e "Installing ssh key pair"
 cp $1 /home/vagrant/.ssh/id_dsa
