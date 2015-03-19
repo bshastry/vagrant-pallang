@@ -32,5 +32,6 @@ sudo update-alternatives --install /usr/bin/scan-view scan-view /usr/bin/scan-vi
 
 echo -e "Installing ssh key pair"
 cp $1 /home/vagrant/.ssh/id_dsa
+sudo chown vagrant:vagrant /home/vagrant/.ssh/id_dsa
 
 echo -e "Provisioning done"
