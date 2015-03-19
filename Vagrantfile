@@ -69,5 +69,11 @@ Vagrant.configure(2) do |config|
 	s.path = "provision.sh"
 	s.args = "/vagrant/conf.d/id_dsa"
   end
+  config.vm.provider "virtualbox" do |v|
+	v.name = "pallang-vm"
+	v.customize ["modifyvm", :id, "--cpuexecutioncap", "90"]
+	v.memory = 4096
+	v.cpus = 2
+  end
   config.ssh.forward_agent = true 
 end
