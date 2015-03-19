@@ -1,13 +1,14 @@
 #!/bin/bash
 
 PATCHFILE="/vagrant/scripts/LLVMConfig.patch"
+BUGGYFILE="/usr/share/llvm-3.6/cmake/LLVMConfig.cmake"
 
-patch -p0 -N --dry-run --silent < $PATCHFILE 2>/dev/null
+sudo patch -p1 --dry-run --silent $BUGGYFILE < $PATCHFILE 2>/dev/null
 
 if [ $? -eq 0 ];
 then
 echo -e "\t[+] Patching LLVMConfig.cmake"
-sudo patch -sp1 /usr/share/llvm-3.6/cmake/LLVMConfig.cmake < $PATCHFILE
+sudo patch -sp1 $BUGGYFILE < $PATCHFILE
 fi
 
 cd $HOME

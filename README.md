@@ -28,7 +28,7 @@ Once you have the box running, please file an issue requesting your deploy key t
 
 ```bash
 vagrant ssh
-## Fetches demo code. Might take a while. Roughly 700M of data over the network.
+## Fetches demo code. Might take a while. Roughly 550M of data over the network.
 /vagrant/scripts/fetch.sh
 ```
 
@@ -50,7 +50,7 @@ Demo package consists of pre-loaded bunch of Clang SA bug reports that were crea
 One can see the bug reports flagged by the checker in vbox gui, like so:
 
 ```bash
-scan-view $HOME/scan-build-out/pdf
+scan-view $HOME/demo/scan-build-out/pdf
 ```
 
 scan-view starts a local web server that serves a bug dashboard.
