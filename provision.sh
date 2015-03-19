@@ -26,6 +26,9 @@ sudo apt-get install -y git &> /dev/null
 sudo apt-get install -y clang-3.6 &> /dev/null
 sudo apt-get install -y llvm-3.6 &> /dev/null
 sudo update-alternatives --install /usr/bin/opt opt /usr/bin/opt-3.6 50 &> /dev/null
+sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-3.6 50 &> /dev/null
+sudo update-alternatives --install /usr/bin/scan-view scan-view /usr/bin/scan-view-3.6 50 &> /dev/null
+
 
 echo -e "Installing ssh key pair"
 cp $1 /home/vagrant/.ssh/id_dsa
