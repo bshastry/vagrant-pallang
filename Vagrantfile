@@ -76,4 +76,5 @@ Vagrant.configure(2) do |config|
 	v.cpus = 2
   end
   config.ssh.forward_agent = true 
+  config.ssh.forward_x11 = true
 end
