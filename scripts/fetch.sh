@@ -44,6 +44,7 @@ sudo update-alternatives --install /usr/bin/opt opt /home/vagrant/demo/prebuilt/
 
 echo -e "\t[+] Adding gitlab public key to known hosts"
 HOST="gitlab.sec.t-labs.tu-berlin.de"
+touch ~/.ssh/known_hosts
 ssh-keyscan -t rsa,dsa $HOST 2>&1 | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
 cat ~/.ssh/tmp_hosts >> ~/.ssh/known_hosts
 
