@@ -42,6 +42,11 @@ rm demo.tar.gz
 echo -e "\t[+] Installing pre-built opt 3.7 debug build"
 sudo update-alternatives --install /usr/bin/opt opt /home/vagrant/demo/prebuilt/clang-llvm/bin/opt 50 &> /dev/null
 
+echo -e "\t[+] Adding gitlab public key to known hosts"
+HOST="gitlab.sec.t-labs.tu-berlin.de"
+ssh-keyscan -t rsa,dsa $HOST 2>&1 | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
+cat ~/.ssh/tmp_hosts >> ~/.ssh/known_hosts
+
 # Fetch LLVM pass code
 if [ ! -e llvm-pass ]; then
 echo -e "\t[+] Cloning llvm pass"
