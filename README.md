@@ -27,6 +27,19 @@ For exercising LLVM pass in the box, you'll need
 - VT-x enabled on host
 - Sufficient RAM [4G RAM allocated to guest]
 - lscpu shows at least 2 CPUs
+
+*Note*
+
+If you don't intend to run the pass in the guest, it is safe to comment out the following portions of Vagrantfile. Besides, if your host architecture does not support VT-x and/or you don't have much compute power to spare, this is a must.
+
+```txt
+#  config.vm.provider "virtualbox" do |v|
+#        v.name = "pallang-vm"
+#        v.customize ["modifyvm", :id, "--cpuexecutioncap", "90"]
+#        v.memory = 4096
+#        v.cpus = 2
+#  end
+```
  
 **Command line**
 
