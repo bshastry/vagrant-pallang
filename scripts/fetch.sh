@@ -29,7 +29,7 @@ fi
 mkdir -p demo
 cd demo
 
-FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=1b7c9e6f20d4cda3e45d18e9bbd1ec6a&download'
+FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=327276dd914aadf6d33d4009953ee34c&download'
 
 # Fetch prebuilt stuff and demo material
 echo -e "\t[+] Fetching demo stuff. This is going to take a while..."
@@ -69,5 +69,8 @@ cd pallang
 git checkout vagrant
 cd ..
 fi
+
+echo -e "\t[+] Installing pallang"
+sudo update-alternatives --install /usr/bin/pallang pallang /home/vagrant/demo/pallang/BSparserCaller.sh 50 &> /dev/null
 
 echo -e "\t[+] Successfully fetched demo package"
