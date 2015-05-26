@@ -70,6 +70,14 @@ git checkout vagrant
 cd ..
 fi
 
+if [ ! -e whole-program-llvm ]; then
+echo -e "\t[+] Cloning whole program llvm builder"
+git clone git@gitlab.sec.t-labs.tu-berlin.de:static-analysis/whole-program-llvm.git
+cd whole-program-llvm
+git checkout extract-bc-experimental
+cd ..
+fi
+
 echo -e "\t[+] Installing pallang"
 sudo update-alternatives --install /usr/bin/pallang pallang /home/vagrant/demo/pallang/BSparserCaller.sh 50 &> /dev/null
 
