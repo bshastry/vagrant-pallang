@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
 sudo apt-get update &> /dev/null
 
 ### Pre-reqs: GCC-4.8 for chromium, cmake as project builder
-echo -e "Installing gcc-4.8 backport, clang, llvm, vim, git, and firefox"
+echo -e "Installing gcc-4.8 backport, clang, llvm, vim, git, make, and firefox"
 echo -e "This might take a while...Coffee, perhaps?"
 sudo apt-get install -y python-software-properties &> /dev/null
 sudo apt-get install -y python-bs4 &> /dev/null
@@ -29,10 +29,11 @@ sudo apt-get install -y llvm-3.6 &> /dev/null
 sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-3.6 50 &> /dev/null
 sudo update-alternatives --install /usr/bin/scan-view scan-view /usr/bin/scan-view-3.6 50 &> /dev/null
 
+sudo apt-get install -y make &> /dev/null
 sudo apt-get install -y firefox &> /dev/null
 
-echo -e "Installing ssh key pair"
-cp $1 /home/vagrant/.ssh/id_dsa
-sudo chown vagrant:vagrant /home/vagrant/.ssh/id_dsa
+#echo -e "Installing ssh key pair"
+#cp $1 /home/vagrant/.ssh/id_dsa
+#sudo chown vagrant:vagrant /home/vagrant/.ssh/id_dsa
 
 echo -e "Provisioning done"
