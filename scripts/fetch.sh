@@ -29,7 +29,7 @@ fi
 mkdir -p demo
 cd demo
 
-FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=327276dd914aadf6d33d4009953ee34c&download'
+FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=3c38d574d6ca0e573c81a499c0de1d65&download'
 
 # Fetch prebuilt stuff and demo material
 echo -e "\t[+] Fetching demo stuff. This is going to take a while..."
@@ -39,8 +39,12 @@ tar -zxf demo.tar.gz
 rm demo.tar.gz
 
 # Patch opt
-echo -e "\t[+] Installing pre-built opt 3.7 debug build"
+echo -e "\t[+] Installing pre-built clang, opt, and llvm-link 3.7 debug versions"
 sudo update-alternatives --install /usr/bin/opt opt /home/vagrant/demo/prebuilt/clang-llvm/bin/opt 50 &> /dev/null
+sudo update-alternatives --install /usr/bin/llvm-link llvm-link /home/vagrant/demo/prebuilt/clang-llvm/bin/llvm-link 50 &> /dev/null
+
+sudo update-alternatives --install /usr/bin/clang clang /home/vagrant/demo/prebuilt/clang-llvm/bin/clang 50 &> /dev/null
+sudo update-alternatives --install /usr/bin/clang++ clang++ /home/vagrant/demo/prebuilt/clang-llvm/bin/clang++ 50 &> /dev/null
 
 echo -e "\t[+] Adding gitlab public key to known hosts"
 HOST="gitlab.sec.t-labs.tu-berlin.de"
@@ -78,7 +82,18 @@ git checkout extract-bc-experimental
 cd ..
 fi
 
+echo -e "\t[+] Installing wllvm tools"
+sudo update-alternatives --install /usr/bin/wllvm wllvm /home/vagrant/demo/whole-program-llvm/wllvm 50 &> /dev/null
+sudo update-alternatives --install /usr/bin/wllvm++ wllvm++ /home/vagrant/demo/whole-program-llvm/wllvm++ 50 &> /dev/null
+sudo update-alternatives --install /usr/bin/extract-bc extract-bc /home/vagrant/demo/whole-program-llvm/extract-bc 50 &> /dev/null
+
 echo -e "\t[+] Installing pallang"
 sudo update-alternatives --install /usr/bin/pallang pallang /home/vagrant/demo/pallang/BSparserCaller.sh 50 &> /dev/null
+
+echo -e "\t[+] Creating aliases"
+cat <<EOF >> ~/.bash_aliases
+alias pscan-build='export LLVM_COMPILER=clang; scan-build -internal-stats -disable-checker core,unix,deadcode,cplusplus,security -o scan-build-out -analyze-headers --use-analyzer /home/vagrant/demo/prebuilt/clang-llvm/bin/clang -load-plugin /home/vagrant/demo/prebuilt/libanalysis/libusedef-checker.so -enable-checker alpha.security.UseDefChecker --use-cc wllvm --use-c++ wllvm++'
+EOF
+source ~/.bashrc
 
 echo -e "\t[+] Successfully fetched demo package"
