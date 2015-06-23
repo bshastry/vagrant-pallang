@@ -93,6 +93,7 @@ sudo update-alternatives --install /usr/bin/pallang pallang /home/vagrant/demo/p
 echo -e "\t[+] Creating aliases"
 cat <<EOF >> ~/.bash_aliases
 alias pscan-build='export LLVM_COMPILER=clang; scan-build -internal-stats -disable-checker core,unix,deadcode,cplusplus,security -o scan-build-out -analyze-headers --use-analyzer /home/vagrant/demo/prebuilt/clang-llvm/bin/clang -load-plugin /home/vagrant/demo/prebuilt/libanalysis/libusedef-checker.so -enable-checker alpha.security.UseDefChecker --use-cc wllvm --use-c++ wllvm++'
+alias sb='scan-build -o scan-build-out -analyze-headers --use-analyzer /home/vagrant/demo/prebuilt/clang-llvm/bin/clang -load-plugin /home/vagrant/demo/prebuilt/libanalysis/libusedef-checker.so -enable-checker alpha.security.UseDefChecker'
 EOF
 source ~/.bashrc
 
