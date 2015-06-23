@@ -31,6 +31,7 @@ sudo update-alternatives --install /usr/bin/scan-view scan-view /usr/bin/scan-vi
 
 sudo apt-get install -y make &> /dev/null
 sudo apt-get install -y firefox &> /dev/null
+sudo apt-get install -y ncurses-dev &> /dev/null
 
 #echo -e "Installing ssh key pair"
 #cp $1 /home/vagrant/.ssh/id_dsa
