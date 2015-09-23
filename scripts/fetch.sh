@@ -29,7 +29,7 @@ fi
 mkdir -p demo
 cd demo
 
-FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=3c38d574d6ca0e573c81a499c0de1d65&download'
+FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=99f6a191a03c8c5755dfa4e78b28c66b&download'
 
 # Fetch prebuilt stuff and demo material
 echo -e "\t[+] Fetching demo stuff. This is going to take a while..."
