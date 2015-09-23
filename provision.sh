@@ -17,8 +17,8 @@ wget -qO - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add - &> /de
 
 sudo apt-get update &> /dev/null
 sudo apt-get install -y gcc-4.8 g++-4.8 &> /dev/null
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50 &> /dev/null
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50 &> /dev/null
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 1 &> /dev/null
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 1 &> /dev/null
 
 sudo apt-get install -y vim &> /dev/null
 sudo apt-get install -y git &> /dev/null

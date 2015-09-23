@@ -60,6 +60,8 @@ cd llvm-pass
 git checkout vagrant
 mkdir -p build
 cd build
+echo -e "\t[+] Patching Callgraph.h"
+sudo patch /usr/lib/llvm-3.6/include/llvm/Analysis/CallGraph.h < /vagrant/llvm-callgraph.patch &> /dev/null
 echo -e "\t[+] Running CMake on llvm-pass"
 cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../
 cd ../../

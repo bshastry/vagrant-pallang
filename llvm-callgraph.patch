@@ -1,0 +1,48 @@
+From 029c7c89680526bd6af6da1812d5bb2ac71b85a0 Mon Sep 17 00:00:00 2001
+From: Bhargava Shastry <bshastry@sec.t-labs.tu-berlin.de>
+Date: Thu, 2 Jul 2015 14:16:07 +0200
+Subject: [PATCH] CallGraph.h : Using CallGraph as a base class for rapid type
+ analysis
+
+---
+ include/llvm/Analysis/CallGraph.h |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a//usr/lib/llvm-3.6/include/llvm/Analysis/CallGraph.h b//usr/lib/llvm-3.6/include/llvm/Analysis/CallGraph.h
+index 64d288a..c47cee7 100644
+--- a//usr/lib/llvm-3.6/include/llvm/Analysis/CallGraph.h
++++ b//usr/lib/llvm-3.6/include/llvm/Analysis/CallGraph.h
+@@ -72,6 +72,7 @@ class CallGraphNode;
+ ///
+ /// The core call graph itself can also be updated to reflect changes to the IR.
+ class CallGraph {
++protected:
+   Module &M;
+ 
+   typedef std::map<const Function *, CallGraphNode *> FunctionMapTy;
+@@ -98,17 +99,17 @@ class CallGraph {
+   /// callers from the old function to the new.
+   void spliceFunction(const Function *From, const Function *To);
+ 
+-  /// \brief Add a function to the call graph, and link the node to all of the
+-  /// functions that it calls.
+-  void addToCallGraph(Function *F);
+-
+ public:
+   CallGraph(Module &M);
+-  ~CallGraph();
++  virtual ~CallGraph();
+ 
+   void print(raw_ostream &OS) const;
+   void dump() const;
+ 
++  /// \brief Add a function to the call graph, and link the node to all of the
++  /// functions that it calls.
++  virtual void addToCallGraph(Function *F);
++
+   typedef FunctionMapTy::iterator iterator;
+   typedef FunctionMapTy::const_iterator const_iterator;
+ 
+-- 
+1.7.9.5
+
