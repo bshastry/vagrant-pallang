@@ -1,28 +1,18 @@
-#### Introduction
+### Introduction
 
-This is a vagrant box that demos *PALLang*---acronym for Program Analysis with LLVM and Clang---a heuristics based program analysis tool that eagerly flags uses of potentially undefined CXX fields in Chromium code. The original motivation was to complement MSan with an earlier stage static analysis.
+This is a vagrant box that demos *PALLang*---acronym for Program Analysis with LLVM and Clang---a heuristics based program analysis tool that eagerly flags uses of potentially undefined CXX class members in source code. It is vaguely like lint, very vaguely if you look into it closely. Try it!
 
-The hope is that developers tolerate many more false positives than MSan while getting analysis diagnostics at an earlier stage of development. Having said that, with this tool, a serious effort is made to bring down the number of false positives by supplementing Clang SA runs with an LLVM pass that has global outlook. The idea is to filter out bug reports that are or are likely false positives so developers look at bugs that merit attention. In the LLVM pass, filtering is done by simple taint analysis on the LLVM libraries where bugs manifest. The biggest LLVM library that analysis is done on is libpdf.a which is 328 MB in size.
+### Demo: Provisioning and running
 
-Since running Clang SA and/or LLVM pass on chromium code is expensive (read ~12 hours wall clock time for analyzing the pdf ninja project), Clang SA bug reports and results of LLVM pass against these reports have been preloaded in the box. You can use scan-view (available in the box) to look at Clang SA bug reports and a text editor to look at LLVM pass results. For Clang SA bug reports, on the scan view dashboard, the checker that is part of PALLang may be identified by the description `Undefined CXX object checker` under the `Logic Error` bug type. There are 159 bug reports flagged by the checker in the `pdf` ninja project i.e., while building libpdf.so in Chromium.
+#### Pre-requisites
 
-If you have enough compute power on the host, you can even exercise the LLVM pass over preloaded Clang SA reports afresh. For this, the box contains a bash wrapper (`BSparserCaller.sh`) around a python script (`BSparser.py`) that exercises the LLVM pass part of PALLang against Clang SA bug reports of libpdf.
+On Host:
 
-Seeing preloaded bug reports is highly recommended as a good starting point. This gives you an impression of:
+- [vagrant][1] (Tested with v1.7.2)
+- virtualbox (Tested with v4.3.14)
+- C++ codebase to analyze, preferably something you are familiar with
 
-1. False positives weeded out by LLVM analysis.
-2. More informative diagnostics on bugs that merit attention.
-
-As a teaser, in the specific instance of pdf (ninja project) analysis, of the 159 reports flagged by checker, LLVM pass classifies ~70 as false positives. Of the remaining, it provides extended diagnostics for ~40 bug reports.
-
-#### Demo: Provisioning and running
-
-**Pre-requisites**
-
-- vagrant (Tested on v1.7.2)
-- virtualbox (Tested on v4.3.14)
-
-For exercising LLVM pass in the box, you'll need
+For running stage 2 analysis in the box, you'll need
 
 - VT-x enabled on host
 - Sufficient RAM [4G RAM allocated to guest]
@@ -41,75 +31,97 @@ If you don't intend to run the pass in the guest, it is safe to comment out the 
 #  end
 ```
  
-**Command line**
+#### Command line
 
-*Clone box config*
-
-```bash
-cd $YOUR_WORK_DIR
-git clone git@gitlab.sec.t-labs.tu-berlin.de:static-analysis/vagrant-pallang.git
-cd vagrant-pallang
-```
-
-At this point, you would need to generate a keypair and place them in the conf.d directory. This is going to be the deploy key for your box instance. The provisioning script (`provision.sh`) copies the generated private key to the box's `$HOME/.ssh`. Once you have generated a keypair, please file an issue on gitlab so we can add the public key on the server side. After your public key has been added, you will be notified by email. You can then fetch the demo tarball. Do:
-
-*Bring up box and fetch demo tarball*
+**Clone box config**
 
 ```bash
-vagrant up
-## This gives you an ssh shell in the box with X forwarding enabled
-vagrant ssh
-## Fetches demo code. Might take a while. Roughly 550M of data over the network.
-/vagrant/scripts/fetch.sh
+user@host:~$ git clone git@gitlab.sec.t-labs.tu-berlin.de:static-analysis/vagrant-pallang.git
+user@host:~$ cd vagrant-pallang
 ```
 
-This will fetch the demo code into $HOME/demo of the vagrant box.
+Next, bring up the box.
 
-*Simply view preloaded bug reports*
-
-For viewing Clang SA bug reports, do:
+**Bring up box and fetch demo tarball**
 
 ```bash
-scan-view $HOME/demo/scan-build-out/pdf
+user@host:<Vagrant-pallang-dir>$ vagrant up
+## This gives you an ssh shell in the box with X11 forwarding
+user@host:<Vagrant-pallang-dir>$ vagrant ssh
+## Fetches demo code. Might take a while. Roughly 350M of data over the network.
+vagrant@precise64:~$ /vagrant/scripts/fetch.sh
 ```
 
-Firefox browser GUI instance on guest is forwarded to host. On the bug dashboard uncheck all and check only `CXX Undef Object Checker` to narrow attention to this tool.
+This will fetch the demo code into $HOME/demo of the vagrant box. At this point, the box is ready for analyzing code.
+The analysis is performed over two stages. In stage 1, source code analysis is performed alongside compilation. In stage 2, IR code is analyzed. More on this later.
 
-For viewing LLVM pass results, do:
+**Run Stage 1 analysis**
+
+First, clone a c++ repo of your choice.
 
 ```bash
-## Full report
-vim $HOME/demo/pallang/preloaded/pass-vagrant-v1.6.1-pdf.txt
+## Clone something
+vagrant@precise64:~$ mkdir code; cd code
+vagrant@precise64:~/code$ git clone $something
 
-## Summary
-vim $HOME/demo/pallang/preloaded/Summary.txt
+## Configure or something like that
+vagrant@precise64:~/code/something$ pscan-build ./configure
+
+## Make or something like that
+vagrant@precise64:~/code/something$ pscan-build make
 ```
 
-*Running LLVM pass*
+Note that analysis+compilation is possibly an order of magnitude slower than native compilation only. Expect high latency for large codebases. If you want this to be less intrusive on host processes, lower the max cpu execution cap in `Vagrantfile`, like so:
 
 ```bash
-cd $HOME/demo/pallang
-./BSparserCaller.sh &
+#        v.customize ["modifyvm", :id, "--cpuexecutioncap", "20"]
 ```
 
-This should print out results of LLVM pass to `$HOME/demo/pallang/passname.txt`. The script logs summary of the complete run (`Summary.txt`) and times each run of the pass against a bug report (`time-pass.txt`). What the script (`BSparserCaller.sh`) is doing is running the LLVM pass against a bunch of (159) Clang SA bug reports that were flagged by the heurisitcal checker. Please note that LLVM analysis can be I/O and CPU intensive. Some bug reports in libpdf require ~2 hours for analysis.
+In addition, use `screen`/`tmux` to manage analysis sessions in the box. This way, you can leave box while analysis happens, peeking into the box at your leisure via `vagrant ssh` from the root vagrant directory.
 
-#### Miscellaneous
+Output of analysis i.e., Clang SA bug reports will be placed in `./scan-build-out` relative to $something directory. If you want stuff to persist on host PC after powering off vagrant box (via `vagrant halt` or `vagrant destroy`), do everything relative to `/vagrant` since that directory is explicitly synced with namesake on host prior to box poweroff.
 
-**Box contents**
+Once analysis is complete, you can view an indexed summary of analysis results via `scan-view`:
+
+```bash
+vagrant@precise64:~/code/something$ scan-view ./scan-build-out/$DIRNAME
+```
+
+Next, you are ready to run second and final analysis against IR code. But before that you need to extract IR code from a native executable or library.
+
+**Run Stage 2 analysis**
+
+First, please locate analysis target, and then run `extract-bc` against it, like so:
+
+```bash
+vagrant@precise64:~/code/$something/PATH_TO_TARGET$ extract-bc -v target
+```
+
+This creates an LLVM module from the native library/executable. For the magic behind this, consult [whole program llvm][2].
+Next, we run the second and final stage analysis.
+
+
+```bash
+vagrant@precise64:~/code/$something$ mkdir pallang; cd pallang
+vagrant@precise64:~/code/$something$ pallang $PATH_TO_SCAN_BUILD_REPORTS $PATH_TO_BC_TARGET --wpa &
+```
+
+The filename `pass.*.txt` is going to contain pass results for bug reports analyzed. A summary of analysis will be printed to a namesake file once stage 2 analysis is complete.
+
+Please note that LLVM analysis can be I/O and CPU intensive. Analysis of bug reports against huge LLVM modules (hundreds of MBs) require ~2 hours for analysis.
+
+#### Box contents
 
 - precise64 box
-  - vim, git, clang-3.6, llvm-3.6, gcc-4.8, firefox installed
+  - vim, git, clang-3.6, llvm-3.6, gcc-4.8, make, firefox installed
   - analysis infra
-    - prebuilt llvm opt binary
-    - Clang SA bug reports for pdf ninja
-    - llvm-pass and pallang
+    - prebuilt llvm and patched clang binaries
+    - prebuilt analysis plug-in provisioned as a shared library
+    - Source code for llvm-pass and pallang script
 
-Analysis infra is fetched by a script once deploy key has been set up.
+[1]: https://www.vagrantup.com/
+[2]: https://github.com/travitch/whole-program-llvm
 
-**False positives**
+### Misc
 
-This is WIP. Known sources of false positives of PALLang are:
-
-- Array assignments e.g., int x[2]; x = y; x[0] = 0;
-- Init/Create methods e.g., Foo fooObject; fooObject.init()
+[Archive](Archive)
