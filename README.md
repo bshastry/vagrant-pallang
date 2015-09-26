@@ -124,8 +124,10 @@ Please note that LLVM analysis can be I/O and CPU intensive. Analysis of bug rep
 
 ### Acknowledgements
 
-- [WLLVM][https://github.com/travitch/whole-program-llvm]
+- [WLLVM][1]
 
 ### Misc
 
 [Archive](Archive)
+
+[1]: https://github.com/travitch/whole-program-llvm
