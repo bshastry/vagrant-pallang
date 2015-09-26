@@ -36,7 +36,7 @@ If you don't intend to run the pass in the guest, it is safe to comment out the 
 **Clone box config**
 
 ```bash
-user@host:~$ git clone git@gitlab.sec.t-labs.tu-berlin.de:static-analysis/vagrant-pallang.git
+user@host:~$ git clone https://github.com/bshastry/vagrant-pallang.git
 user@host:~$ cd vagrant-pallang
 ```
 
