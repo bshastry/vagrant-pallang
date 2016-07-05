@@ -1,6 +1,6 @@
 ### Introduction
 
-This is a vagrant box that demos *PALLang*---acronym for Program Analysis with LLVM and Clang---a heuristics based program analysis tool that eagerly flags uses of potentially undefined CXX class members in source code. It is vaguely like lint, very vaguely if you look into it closely. Try it!
+This is a vagrant box that demos *Melange*, a heuristics based program analysis tool that eagerly flags multiple bug classes in source code. It is vaguely like lint, very vaguely if you look into it closely. Try it!
 
 ### Demo: Provisioning and running
 
