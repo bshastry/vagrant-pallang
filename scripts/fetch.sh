@@ -29,7 +29,7 @@ fi
 mkdir -p demo
 cd demo
 
-FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=99f6a191a03c8c5755dfa4e78b28c66b&download'
+FETCH_FROM='https://owncloud.sec.t-labs.tu-berlin.de/owncloud/public.php?service=files&t=7e04d7a2567683144ccd52d9adb64e28&download'
 
 # Fetch prebuilt stuff and demo material
 echo -e "\t[+] Fetching demo stuff. This is going to take a while..."
@@ -60,7 +60,7 @@ cd llvm-pass
 git checkout vagrant
 mkdir -p build
 cd build
-echo -e "\t[+] Patching Callgraph.h"
+echo -e "\t[+] Patching Callgraph.h and CHA-Pass.h"
 sudo patch /usr/lib/llvm-3.6/include/llvm/Analysis/CallGraph.h < /vagrant/llvm-callgraph.patch &> /dev/null
 echo -e "\t[+] Running CMake on llvm-pass"
 cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../
@@ -96,6 +96,7 @@ echo -e "\t[+] Creating aliases"
 cat <<EOF >> ~/.bash_aliases
 alias pscan-build='export LLVM_COMPILER=clang; scan-build -internal-stats -disable-checker core,unix,deadcode,cplusplus,security -o scan-build-out -analyze-headers --use-analyzer /home/vagrant/demo/prebuilt/clang-llvm/bin/clang -load-plugin /home/vagrant/demo/prebuilt/libanalysis/libusedef-checker.so -enable-checker alpha.security.UseDefChecker --use-cc wllvm --use-c++ wllvm++'
 alias sb='scan-build -o scan-build-out -analyze-headers --use-analyzer /home/vagrant/demo/prebuilt/clang-llvm/bin/clang -load-plugin /home/vagrant/demo/prebuilt/libanalysis/libusedef-checker.so -enable-checker alpha.security.UseDefChecker'
+alias melange='scan-build -o scan-build-out --use-analyzer /home/vagrant/demo/prebuilt/clang-llvm/bin/clang -load-plugin /home/vagrant/demo/prebuilt/libanalysis/libusedef-checker.so -disable-checker core,unix,deadcode,cplusplus,security'
 EOF
 source ~/.bashrc
 

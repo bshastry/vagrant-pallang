@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "hashicorp/precise32"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -72,7 +72,7 @@ Vagrant.configure(2) do |config|
   config.vm.provider "virtualbox" do |v|
 	v.name = "pallang-vm"
 	v.customize ["modifyvm", :id, "--cpuexecutioncap", "90"]
-	v.memory = 4096
+	v.memory = 8192
 	v.cpus = 2
   end
   config.ssh.forward_agent = true 
