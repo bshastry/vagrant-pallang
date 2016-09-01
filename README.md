@@ -1,4 +1,4 @@
-### Introduction
+### Towards Vulnerability Discovery Using Staged Program Analysis
 
 This is a vagrant box that demos *Melange*, a heuristics based program analysis tool that eagerly flags multiple bug classes in source code. It is vaguely like lint, very vaguely if you look into it closely. Try it!
 
@@ -121,6 +121,21 @@ Please note that LLVM analysis can be I/O and CPU intensive. Analysis of bug rep
 
 [1]: https://www.vagrantup.com/
 [2]: https://github.com/travitch/whole-program-llvm
+
+### Citation
+
+```
+@inproceedings{shastry2016towards,
+  title={Towards Vulnerability Discovery Using Staged Program Analysis},
+  author={Shastry, Bhargava and Yamaguchi, Fabian and Rieck, Konrad and Seifert, Jean-Pierre},
+  booktitle={13th International Conference, DIMVA 2016, San Sebasti{\'a}n, Spain, July 7-8, 2016, Proceedings},
+  volume={97212016},
+  number={Lecture Notes in Computer Science},
+  pages={78--97},
+  year={2016},
+  organization={Springer International Publishing}
+}
+```
 
 ### Acknowledgements
 
